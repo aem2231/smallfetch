@@ -1,0 +1,3 @@
+/home/eris/Projects/compfetch/cmake-build-debug/CMakeFiles/sillyfetch.dir
+/home/eris/Projects/compfetch/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/eris/Projects/compfetch/cmake-build-debug/CMakeFiles/rebuild_cache.dir
