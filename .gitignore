@@ -8,6 +8,7 @@ CMakeScripts/
 cmake_install.cmake
 Makefile
 Makefile.user
+cmake-build-debug/
 
 # Build output directories
 build/
@@ -41,4 +42,4 @@ release/
 .direnv/
 
 #ignore binary
-./main
+main
