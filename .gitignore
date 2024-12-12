@@ -39,3 +39,6 @@ release/
 
 # Ignore .direnv directory
 .direnv/
+
+#ignore binary
+./main
