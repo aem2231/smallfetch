@@ -1,0 +1,41 @@
+# CLion files
+.idea/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+Makefile
+Makefile.user
+
+# Build output directories
+build/
+bin/
+out/
+
+# User-specific files
+*.iml
+
+# Compiler output
+*.o
+*.a
+*.so
+*.exe
+*.out
+*.app
+
+# Debug/Release directories
+debug/
+release/
+
+# User configuration files
+.idea/workspace.xml
+.idea/modules.xml
+.idea/.name
+
+# Temporary files created by CLion
+.idea/.idea_modules/
+
+# Ignore .direnv directory
+.direnv/
