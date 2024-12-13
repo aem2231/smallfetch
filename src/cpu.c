@@ -2,6 +2,10 @@
 #include <string.h>
 #include "cpu.h"
 
+/* TODO:
+     Ensure code is memory safe
+     Null terminate all strings */
+
 int get_cpu_model(char* cpu_name){
     FILE* fp;
     char line[256];
@@ -11,7 +15,7 @@ int get_cpu_model(char* cpu_name){
     fp = fopen("/proc/cpuinfo", "r");
     if (fp == NULL) {
         printf("Unable to get cpu model: '/proc/cpuinfo' not found.");
-        cpu_name = "Unknown";
+        strcpy(cpu_name, "Unknown");
         return 0;
     }
     while (fgets(line, 256, fp)){
@@ -22,7 +26,23 @@ int get_cpu_model(char* cpu_name){
             break;
         }
     }
-    // TODO: Add code to strip cpu name from line
-    strcpy(cpu_name, unstripped_cpu_name);
+    fclose(fp);
+
+    char ch = ':';
+    const char* pdelimiter = strchr(unstripped_cpu_name, ch);
+
+    if (pdelimiter == NULL) {
+        strcpy(cpu_name, unstripped_cpu_name);
+        return 0;
+    }
+
+    pdelimiter++;
+    while (*pdelimiter == ' ') {
+        pdelimiter++;
+    }
+
+    int remaining_length = strlen(pdelimiter);
+    strncpy(cpu_name, pdelimiter, remaining_length);
+    cpu_name[remaining_length] = '\0';
     return 0;
 }
