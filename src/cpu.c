@@ -2,11 +2,7 @@
 #include <string.h>
 #include "cpu.h"
 
-/* TODO:
-     Ensure code is memory safe
-     Null terminate all strings */
-
-int get_cpu_model(char* cpu_name){
+int get_cpu_model(char* cpu_name, size_t cpu_name_size){
     FILE* fp;
     char line[256];
     char substring[256];
@@ -15,7 +11,8 @@ int get_cpu_model(char* cpu_name){
     fp = fopen("/proc/cpuinfo", "r");
     if (fp == NULL) {
         printf("Unable to get cpu model: '/proc/cpuinfo' not found.");
-        strcpy(cpu_name, "Unknown");
+        strncpy(cpu_name, "Unknown", cpu_name_size - 1);
+        cpu_name[cpu_name_size - 1 ] = '\0';
         return 0;
     }
     while (fgets(line, 256, fp)){
@@ -23,6 +20,7 @@ int get_cpu_model(char* cpu_name){
         substring[10] = '\0';
         if (strcmp(substring, "model name") == 0){
             strcpy(unstripped_cpu_name, line);
+            unstripped_cpu_name[sizeof(unstripped_cpu_name) - 1] = '\0';
             break;
         }
     }
@@ -32,7 +30,8 @@ int get_cpu_model(char* cpu_name){
     const char* pdelimiter = strchr(unstripped_cpu_name, ch);
 
     if (pdelimiter == NULL) {
-        strcpy(cpu_name, unstripped_cpu_name);
+        strncpy(cpu_name, unstripped_cpu_name, sizeof(unstripped_cpu_name) - 1);
+        cpu_name[cpu_name_size - 1] = '\0';
         return 0;
     }
 
@@ -42,6 +41,10 @@ int get_cpu_model(char* cpu_name){
     }
 
     int remaining_length = strlen(pdelimiter);
+    if (remaining_length >= cpu_name_size){
+        remaining_length = cpu_name_size - 1;
+    }
+
     strncpy(cpu_name, pdelimiter, remaining_length);
     cpu_name[remaining_length] = '\0';
     return 0;
