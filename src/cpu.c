@@ -10,7 +10,7 @@ int get_cpu_model(char* cpu_name, size_t cpu_name_size){
 
     fp = fopen("/proc/cpuinfo", "r");
     if (fp == NULL) {
-        printf("Unable to get cpu model: '/proc/cpuinfo' not found.");
+        perror("Unable to get cpu model: '/proc/cpuinfo' not found.");
         strncpy(cpu_name, "Unknown", cpu_name_size - 1);
         cpu_name[cpu_name_size - 1 ] = '\0';
         return -1;
