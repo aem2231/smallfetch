@@ -20,6 +20,7 @@ int get_kernel_version(char* kernel_version, size_t kernel_size){
     strncpy(version, unameData.release, sizeof(version) - 1);
     version[sizeof(version) - 1] = '\0';
 
+    strncat(kernel_version, " ", kernel_size - strlen(kernel_version) - 1);
     strncat(kernel_version, unameData.release, kernel_size - strlen(kernel_version) - 1);
     return 0;
 }

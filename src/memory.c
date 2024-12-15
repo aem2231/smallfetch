@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-int get_ram_info(long* mem, long* mem_available, long* mem_usage){
+int get_ram_info(double* mem, double* mem_available, double* mem_usage){
     FILE* fp;
     char buffer[256];
     char umem[256];
@@ -40,7 +40,7 @@ int get_ram_info(long* mem, long* mem_available, long* mem_usage){
     }
 
     if (*p_umem != '\0') {
-        *mem = strtol(p_umem, &p_umem, 10);
+        *mem = strtod(p_umem, &p_umem);
     }
 
     char *p_umem_available = umem_available;
@@ -49,10 +49,10 @@ int get_ram_info(long* mem, long* mem_available, long* mem_usage){
     }
 
     if (*p_umem_available != '\0') {
-        *mem_available = strtol(p_umem_available, &p_umem_available, 10);
+        *mem_available = strtod(p_umem_available, &p_umem_available);
     }
 
-    *mem_usage = ((*mem - *mem_available) / *mem) * 100;
+    *mem_usage = ((double)(*mem - *mem_available) / *mem) * 100;
 
     return 0;
 }

@@ -16,6 +16,9 @@ int get_cpu_model(char* cpu_name, size_t cpu_name_size){
         return -1;
     }
     while (fgets(line, 256, fp)){
+        if (line[strlen(line) - 1] == '\n') {
+            line[strlen(line) - 1] = '\0';
+        }
         strncpy(substring, line, 10);
         substring[10] = '\0';
         if (strcmp(substring, "model name") == 0){
