@@ -14,7 +14,7 @@
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell.override
           {
-            # Override stdenv in order to change compiler:
+            # Optionally override stdenv to use a specific compiler, such as clang:
             # stdenv = pkgs.clangStdenv;
           }
           {
@@ -29,9 +29,13 @@
               lcov
               vcpkg
               vcpkg-tool
+              ncurses
             ] ++ (if system == "aarch64-darwin" then [ ] else [ gdb ]);
+
+            shellHook = ''
+              export CFLAGS="-I${pkgs.ncurses.dev}/include"
+            '';
           };
       });
     };
 }
-
