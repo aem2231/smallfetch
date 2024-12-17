@@ -38,10 +38,4 @@ int main(){
     printf("\uF4BC  %s \n", cpu_name);
     printf("\uEFC5  %.2f / %.2f (%.2f%%)\n", (mem_total - mem_free), mem_total, mem_usage);
     printf("\uED95  %ld\n", packages);
-
-    //hostname
-    //kernel
-    //cpu
-    //ram_usage
-    //packages
 }

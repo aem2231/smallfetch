@@ -1,14 +1,11 @@
 #include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
 #include <math.h>
 
 int get_ram_info(double* mem_total, double* mem_free, double* mem_usage){
-    FILE* fp;
     char buffer[256];
 
-    fp = fopen("/proc/meminfo", "r");
+    FILE *fp = fopen("/proc/meminfo", "r");
     if (fp == NULL){
         return -1;
     }
@@ -30,6 +27,5 @@ int get_ram_info(double* mem_total, double* mem_free, double* mem_usage){
     if (*mem_usage > 0 && *mem_free > 0 && *mem_total > 0) {
         return 0;
     }
-
     return -1;
 }

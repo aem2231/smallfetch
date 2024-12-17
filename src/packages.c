@@ -3,8 +3,6 @@
 #include <stdlib.h>
 
 int get_packages(long *packages){
-    FILE*  fp;
-    char buffer[256];
     *packages = 0;
 
     // List of commands for different distros
@@ -29,10 +27,11 @@ int get_packages(long *packages){
 
 
     for(int i = 0; i<sizeof(commands)/sizeof(commands[0]); i++){
-        fp = popen(commands[i], "r");
-        if(fp != NULL){
+        FILE *fp = popen(commands[i], "r");
+        if(fp != NULL) {
+            char buffer[256];
             if(fgets(buffer, sizeof(buffer), fp) != NULL){
-                *packages += atoi(buffer);
+                *packages += strtol(buffer, NULL, 10);
             }
         }
         pclose(fp);
