@@ -3,7 +3,7 @@
 #include <sys/utsname.h>
 #include "kernel.h"
 
-int get_kernel_version(char* kernel_version, size_t kernel_size){
+int get_kernel_version(char* kernel_version, const size_t kernel_size){
     char version[256];
     struct utsname unameData;
 

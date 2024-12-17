@@ -12,7 +12,7 @@ int main(){
     long packages;
     char hostname[256], kernel_version[256], cpu_name[256];
 
-    if (get_cpu_model(cpu_name, sizeof(cpu_name)) == -1) {
+    if (get_cpu_model(cpu_name) == -1) {
         strncpy(cpu_name, "Unknown", sizeof(cpu_name) / sizeof(cpu_name[0]) - 1);
         cpu_name[sizeof(cpu_name) / sizeof(cpu_name[0]) - 1] = '\0';
     };

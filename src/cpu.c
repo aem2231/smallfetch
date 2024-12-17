@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int get_cpu_model(char* cpu_name, size_t cpu_name_size) {
+int get_cpu_model(char *cpu_name) {
     char buffer[256];
 
     FILE *fp = fopen("/proc/cpuinfo", "r");

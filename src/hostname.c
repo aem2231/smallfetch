@@ -4,7 +4,7 @@
 
 #define MAX_HOST_LENGTH 256
 
-int get_hostname(char* host_name, size_t hostname_size){
+int get_hostname(char* host_name, const size_t hostname_size){
     if (gethostname(host_name, hostname_size) == - 1) {
         return -1;
     }
