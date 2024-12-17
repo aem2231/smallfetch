@@ -8,9 +8,6 @@ int get_kernel_version(char* kernel_version, size_t kernel_size){
     struct utsname unameData;
 
     if (uname(&unameData) == -1 ){
-        perror("Unable to get kernel version.");
-        strncpy(kernel_version, "Unknown", kernel_size - 1);
-        kernel_version[kernel_size - 1] = '\0';
         return -1;
     }
 
@@ -22,5 +19,9 @@ int get_kernel_version(char* kernel_version, size_t kernel_size){
 
     strncat(kernel_version, " ", kernel_size - strlen(kernel_version) - 1);
     strncat(kernel_version, unameData.release, kernel_size - strlen(kernel_version) - 1);
-    return 0;
+
+    if (kernel_version != "") {
+        return 0;
+    }
+    return -1;
 }

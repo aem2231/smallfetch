@@ -10,9 +10,6 @@ int get_cpu_model(char* cpu_name, size_t cpu_name_size){
 
     fp = fopen("/proc/cpuinfo", "r");
     if (fp == NULL) {
-        perror("Unable to get cpu model: '/proc/cpuinfo' not found.");
-        strncpy(cpu_name, "Unknown", cpu_name_size - 1);
-        cpu_name[cpu_name_size - 1 ] = '\0';
         return -1;
     }
     while (fgets(line, 256, fp)){
@@ -50,5 +47,9 @@ int get_cpu_model(char* cpu_name, size_t cpu_name_size){
 
     strncpy(cpu_name, pdelimiter, remaining_length);
     cpu_name[remaining_length] = '\0';
-    return 0;
+
+    if (cpu_name != "") {
+        return 0;
+    }
+    return -1;
 }

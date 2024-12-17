@@ -4,55 +4,32 @@
 #include <stdlib.h>
 #include <math.h>
 
-int get_ram_info(double* mem, double* mem_available, double* mem_usage){
+int get_ram_info(double* mem_total, double* mem_free, double* mem_usage){
     FILE* fp;
     char buffer[256];
-    char umem[256];
-    char umem_available[256];
 
     fp = fopen("/proc/meminfo", "r");
     if (fp == NULL){
-        perror("Unable to get ram info: '/proc/meminfo' not found.");
         return -1;
     }
 
-    for (int i = 0; i<3; i++){
-        if(fgets(buffer, sizeof(buffer), fp) != NULL){
-            switch (i) {
-                case 0:
-                    strncpy(umem, buffer, sizeof(buffer));
-                    umem[sizeof(umem) - 1] = '\0';
-                    break;
-                case 2:
-                    strncpy(umem_available, buffer, sizeof(buffer));
-                    umem_available[sizeof(umem_available) - 1] = '\0';
-                    break;
-                default:
-                    continue;
-            }
+    while (fgets(buffer, sizeof(buffer), fp) != NULL){
+        if (sscanf(buffer, "MemTotal: %lf kB", mem_total) == 1) {
+            *mem_total = *mem_total / (1024 * 1024);
+            continue;
+        }
+        if (sscanf(buffer, "MemFree: %lf kB", mem_free) == 1) {
+            *mem_free = *mem_free / (1024 * 1024);
+            break;
         }
     }
     fclose(fp);
 
-    char *p_umem = umem;
-    while (*p_umem != '\0' && !isdigit(*p_umem)) {
-        p_umem++;
+    *mem_usage = ((double)(*mem_total - *mem_free) / *mem_total) * 100;
+
+    if (*mem_usage > 0 && *mem_free > 0 && *mem_total > 0) {
+        return 0;
     }
 
-    if (*p_umem != '\0') {
-        *mem = strtod(p_umem, &p_umem);
-    }
-
-    char *p_umem_available = umem_available;
-    while (*p_umem_available != '\0' && !isdigit(*p_umem_available)) {
-        p_umem_available++;
-    }
-
-    if (*p_umem_available != '\0') {
-        *mem_available = strtod(p_umem_available, &p_umem_available);
-    }
-
-    *mem_usage = ((double)(*mem - *mem_available) / *mem) * 100;
-
-    return 0;
+    return -1;
 }
