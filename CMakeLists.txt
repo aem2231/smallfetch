@@ -12,12 +12,26 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 add_executable(smallfetch
         src/main.c
         src/cpu.c
-        #src/hostname.c
-        #src/kernel.c
-        #src/packages.c
-        #src/ram.c
-        #src/ram_usage.c
+        src/hostname.c
+        src/kernel.c
+        src/memory.c
+        src/packages.c
 )
 
 # Add the include directory for header files
 target_include_directories(smallfetch PRIVATE include/)
+
+# Link libraries
+target_link_libraries(smallfetch m ncurses)
+
+# Set the include path for ncurses
+set(CURSES_INCLUDE_PATH "/nix/store/inpspwqhgpld2zdk89hra7xjh3nxll2x-ncurses-6.4.20221231-dev/include")
+
+# Set the library path for ncurses
+set(CURSES_LIBRARY "/nix/store/inpspwqhgpld2zdk89hra7xjh3nxll2x-ncurses-6.4.20221231-dev/lib/libncurses.so")
+
+# Find the ncurses package
+find_package(Curses REQUIRED)
+
+# Include the ncurses directory
+include_directories(${CURSES_INCLUDE_PATH})
