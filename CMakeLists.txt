@@ -35,3 +35,9 @@ find_package(Curses REQUIRED)
 
 # Include the ncurses directory
 include_directories(${CURSES_INCLUDE_PATH})
+
+# Add optimization flags for release builds
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_C_FLAGS_RELEASE "-O3 -march=native -funroll-loops -flto -DNDEBUG")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -funroll-loops -flto -DNDEBUG")
+endif()
