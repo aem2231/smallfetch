@@ -62,6 +62,7 @@ int main() {
        mem_total, // Total memory
        ((mem_total - mem_free) / mem_total) * 100, // Percentage of used memory
        reset_color);
+
     printf("%s%s %sPACKAGES: %s%ld%s\n", ascii_art_color, ascii_art[5], label_color, info_color, packages, reset_color);
     printf("\n");
 
