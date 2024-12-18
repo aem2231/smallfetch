@@ -28,4 +28,4 @@ Either run `./smallfetch` from the build directory or add it to your path and ru
 
 ## Contributing
 
-Anyone is of course welcome to contribute, this is my first project in C so any criticism or suggestions is welcomed and appreciated.
+Anyone is of course welcome to contribute, this is my first project in C so any criticism or suggestions are welcomed and appreciated.
