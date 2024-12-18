@@ -16,11 +16,12 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 # Add the executable with all source files
 add_executable(smallfetch
         src/main.c
-        src/cpu.c
-        src/hostname.c
-        src/kernel.c
-        src/memory.c
-        src/packages.c
+        src/loadascii.c
+        src/modules/cpu.c
+        src/modules/hostname.c
+        src/modules/kernel.c
+        src/modules/memory.c
+        src/modules/packages.c
 )
 
 # Add the include directory for header files

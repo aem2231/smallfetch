@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-int get_ram_info(double* mem_total, double* mem_free, double* mem_usage){
+int get_memory(double* mem_total, double* mem_free, double* mem_usage){
     char buffer[256];
 
     FILE *fp = fopen("/proc/meminfo", "r");
