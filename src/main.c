@@ -42,13 +42,27 @@ int main() {
         return 1;
     }
 
-    // Display the output
-    printf("%s\n", ascii_art[0]);
-    printf("%s HOSTNAME: %s\n",ascii_art[1], hostname);
-    printf("%s KERNEL: %s\n", ascii_art[2], kernel_version);
-    printf("%s CPU: %s\n", ascii_art[3], cpu_name);
-    printf("%s MEMORY: %.2fGB (%.2f%% used)\n", ascii_art[4], mem_total, mem_usage);
-    printf("%s PACKAGES: %ld\n", ascii_art[5], packages);
+    // Custom colors
+    const char *ascii_art_color = "\033[38;2;243;139;168m"; // Red (for ASCII art)
+    const char *label_color = "\033[38;2;250;179;135m";     // Peach (for labels)
+    const char *info_color = "\033[38;2;255;255;255m";      // White (for system info)
+    const char *reset_color = "\033[0m";                    // Reset to default color
+
+    printf("%s%s\n", ascii_art_color, ascii_art[0]); // ASCII art line 1
+    printf("%s%s %sHOSTNAME: %s%s%s\n", ascii_art_color, ascii_art[1], label_color, info_color, hostname, reset_color);
+    printf("%s%s %sKERNEL: %s%s%s\n", ascii_art_color, ascii_art[2], label_color, info_color, kernel_version, reset_color);
+    printf("%s%s %sCPU: %s%s%s\n", ascii_art_color, ascii_art[3], label_color, info_color, cpu_name, reset_color);
+    printf("%s%s %sMEMORY: %s%.2f / %s%.2f (%.2f%% used)%s\n",
+       ascii_art_color,
+       ascii_art[4],
+       label_color,
+       info_color,
+       (mem_total - mem_free), // Used memory
+       info_color,
+       mem_total, // Total memory
+       ((mem_total - mem_free) / mem_total) * 100, // Percentage of used memory
+       reset_color);
+    printf("%s%s %sPACKAGES: %s%ld%s\n", ascii_art_color, ascii_art[5], label_color, info_color, packages, reset_color);
     printf("\n");
 
     // Free memory allocated by load_ascii_art

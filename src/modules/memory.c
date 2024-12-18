@@ -15,7 +15,7 @@ int get_memory(double* mem_total, double* mem_free, double* mem_usage){
             *mem_total = *mem_total / (1024 * 1024);
             continue;
         }
-        if (sscanf(buffer, "MemFree: %lf kB", mem_free) == 1) {
+        if (sscanf(buffer, "MemAvailable: %lf kB", mem_free) == 1) {
             *mem_free = *mem_free / (1024 * 1024);
             break;
         }
