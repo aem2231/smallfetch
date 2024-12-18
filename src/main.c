@@ -15,6 +15,7 @@ int main() {
     char hostname[256], kernel_version[256], cpu_name[256];
     char **ascii_art = NULL;
     int longest_line = 0;
+    int num_lines = 0;
 
     if (get_cpu_model(cpu_name) == -1) {
         strncpy(cpu_name, "Unknown", sizeof(cpu_name) / sizeof(cpu_name[0]) - 1);
@@ -36,10 +37,11 @@ int main() {
     if (get_packages(&packages) == -1) {
         packages = 0;
     }
-    int num_lines = load_ascii_art(&ascii_art, &longest_line);
-    if (num_lines == -1) {
-        printf("Error loading ASCII art.\n");
-        return 1;
+    if (load_ascii_art(&ascii_art, &longest_line, &num_lines) == -1) {
+        ascii_art = NULL;
+        printf("Error loading ASCII art.\n"
+               "Please make sure the ASCII art file exists at ~/.config/smallfetch/ascii.txt.\n");
+        return -1;
     }
 
     // Custom colors
@@ -61,7 +63,7 @@ int main() {
        info_color,
        mem_total, // Total memory
        ((mem_total - mem_free) / mem_total) * 100, // Percentage of used memory
-       reset_color);
+       reset_color); // This was confusing as shit
 
     printf("%s%s %sPACKAGES: %s%ld%s\n", ascii_art_color, ascii_art[5], label_color, info_color, packages, reset_color);
     printf("\n");
