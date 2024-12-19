@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <threads.h>
+#include <pthread.h>
 #include "cpu.h"
 #include "hostname.h"
 #include "kernel.h"
@@ -10,9 +11,8 @@
 #include "loadascii.h"
 
 int main() {
-    double mem_total, mem_free, mem_usage;
     long packages;
-    char hostname[256], kernel_version[256], cpu_name[256];
+    char hostname[256], kernel_version[256], cpu_name[256], mem_info[512];
     char **ascii_art = NULL;
     int longest_line = 0;
     int num_lines = 0;
@@ -25,10 +25,9 @@ int main() {
         strncpy(hostname, "Unknown", sizeof(hostname) / sizeof(hostname[0]) - 1);
         hostname[sizeof(hostname) / sizeof(hostname[0]) - 1] = '\0';
     }
-    if (get_memory(&mem_total, &mem_free, &mem_usage) == -1) {
-        mem_total = 0;
-        mem_free = 0;
-        mem_usage = 0;
+    if (get_memory(mem_info) == -1) {
+    strncpy(mem_info, "Unknown", sizeof(mem_info) / sizeof(mem_info[0]) - 1);
+        mem_info[sizeof(mem_info) / sizeof(mem_info[0]) - 1] = '\0';
     }
     if (get_kernel_version(kernel_version, sizeof(kernel_version)) == -1) {
         strncpy(kernel_version, "Unknown", sizeof(kernel_version) / sizeof(kernel_version[0]) - 1);
@@ -40,7 +39,7 @@ int main() {
     if (load_ascii_art(&ascii_art, &longest_line, &num_lines) == -1) {
         ascii_art = NULL;
         printf("Error loading ASCII art.\n"
-               "Please make sure the ASCII art file exists at ~/.config/smallfetch/ascii.txt.\n");
+               "Please make sure the ASCII art file exists at \n~/.config/smallfetch/ascii.txt.\n");
         return -1;
     }
 
@@ -54,17 +53,7 @@ int main() {
     printf("%s%s %sHOSTNAME: %s%s%s\n", ascii_art_color, ascii_art[1], label_color, info_color, hostname, reset_color);
     printf("%s%s %sKERNEL: %s%s%s\n", ascii_art_color, ascii_art[2], label_color, info_color, kernel_version, reset_color);
     printf("%s%s %sCPU: %s%s%s\n", ascii_art_color, ascii_art[3], label_color, info_color, cpu_name, reset_color);
-    printf("%s%s %sMEMORY: %s%.2f / %s%.2f (%.2f%% used)%s\n",
-       ascii_art_color,
-       ascii_art[4],
-       label_color,
-       info_color,
-       (mem_total - mem_free), // Used memory
-       info_color,
-       mem_total, // Total memory
-       ((mem_total - mem_free) / mem_total) * 100, // Percentage of used memory
-       reset_color); // This was confusing as shit
-
+    printf("%s%s %sMEMORY: %s%s%s\n", ascii_art_color, ascii_art[4], label_color, info_color, mem_info, reset_color);
     printf("%s%s %sPACKAGES: %s%ld%s\n", ascii_art_color, ascii_art[5], label_color, info_color, packages, reset_color);
     printf("\n");
 
@@ -72,5 +61,6 @@ int main() {
     for (int i = 0; i < num_lines; i++) {
         free(ascii_art[i]);
     }
+    free(ascii_art);
     exit(0);
 }
