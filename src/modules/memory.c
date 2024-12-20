@@ -27,9 +27,6 @@ int get_memory(char* mem_info){
 
     double mem_used = mem_total - mem_free;
     double mem_usage = (mem_used / mem_total) * 100;
-    printf("Total memory: %.2lf GB\n", mem_total);
-    printf("Memory usage: %.2lf%%\n", mem_usage);
-    printf("Memory used: %.2lf GB\n", mem_used);
 
     if (mem_usage > 0 && mem_free > 0 && mem_total > 0) {
         snprintf(mem_info, 512, "%.2lf GB / %.2lf GB (%.2lf%%)", mem_used, mem_total, mem_usage);
