@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-int load_ascii_art(char*** ascii_art, int* longest_line, int* num_lines) {
-    char buffer[256];
+int load_ascii_art(char*** ascii_art, int* longest_line, int* num_lines, char* buffer, size_t buffer_size) {
+    memset(buffer, 0, buffer_size);
     char* home_dir = getenv("HOME");
     char config_path[512];
 
@@ -15,7 +15,7 @@ int load_ascii_art(char*** ascii_art, int* longest_line, int* num_lines) {
     }
 
     *ascii_art = NULL;
-    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+    while (fgets(buffer, buffer_size, fp) != NULL) {
         buffer[strcspn(buffer, "\n")] = '\0';
 
         *ascii_art = (char **)realloc(*ascii_art, (*num_lines + 1) * sizeof(char *));

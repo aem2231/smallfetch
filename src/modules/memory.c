@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
-int get_memory(char* mem_info){
-    char buffer[256];
+int get_memory(char* mem_info, char* buffer, size_t buffer_size){
+    memset(buffer, 0, buffer_size);
     double mem_total;
     double mem_free;
 
@@ -13,7 +14,7 @@ int get_memory(char* mem_info){
         return -1;
     }
 
-    while (fgets(buffer, sizeof(buffer), fp) != NULL){
+    while (fgets(buffer, buffer_size, fp) != NULL){
         if (sscanf(buffer, "MemTotal: %lf kB", &mem_total) == 1) {
             mem_total = mem_total / (1024 * 1024);
             continue;

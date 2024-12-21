@@ -16,8 +16,10 @@ int main() {
     char **ascii_art = NULL;
     int longest_line = 0;
     int num_lines = 0;
+    char buffer[256] = {0};
 
-    if (get_cpu_model(cpu_name) == -1) {
+
+    if (get_cpu_model(cpu_name, buffer, sizeof(buffer)) == -1) {
         strncpy(cpu_name, "Unknown", 256);
         cpu_name[255] = '\0';
     }
@@ -25,18 +27,18 @@ int main() {
         strncpy(hostname, "Unknown", 255);
         hostname[255] = '\0';
     }
-    if (get_kernel_version(kernel_version, 256) == -1) {
+    if (get_kernel_version(kernel_version, buffer, sizeof(buffer)) == -1) {
         strncpy(kernel_version, "Unknown", 255);
         kernel_version[255] = '\0';
     }
-    if (get_memory(mem_info) == -1) {
+    if (get_memory(mem_info, buffer, sizeof(buffer)) == -1) {
         strncpy(mem_info, "Unknown", 256);
         mem_info[255] = '\0';
     }
     if (get_packages(&packages) == -1) {
         packages = 0;
     }
-    if (load_ascii_art(&ascii_art, &longest_line, &num_lines) == -1) {
+    if (load_ascii_art(&ascii_art, &longest_line, &num_lines, buffer, sizeof(buffer)) == -1) {
         printf("Error loading ascii art. Check ~/.config/smallfetch/ascii.txt.");
         return -1;
     }
