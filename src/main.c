@@ -9,68 +9,6 @@
 #include "packages.h"
 #include "loadascii.h"
 
-// Thread argument struct for ASCII art
-typedef struct {
-    char ***ascii_art;
-    int *longest_line;
-    int *num_lines;
-} ThreadArgs;
-
-// Thread functions
-void* cpu_start_routine(void* arg) {
-    char* cpu_name = arg;
-    if (get_cpu_model(cpu_name) == -1) {
-        strncpy(cpu_name, "Unknown", 255);
-        cpu_name[255] = '\0';
-    }
-    return NULL;
-}
-
-void* hostname_start_routine(void* arg) {
-    char* hostname = arg;
-    if (get_hostname(hostname, 256) == -1) {
-        strncpy(hostname, "Unknown", 255);
-        hostname[255] = '\0';
-    }
-    return NULL;
-}
-
-void* memory_start_routine(void* arg) {
-    char* mem_info = arg;
-    if (get_memory(mem_info) == -1) {
-        strncpy(mem_info, "Unknown", 511);
-        mem_info[511] = '\0';
-    }
-    return NULL;
-}
-
-void* kernel_start_routine(void* arg) {
-    char* kernel_version = arg;
-    if (get_kernel_version(kernel_version, 256) == -1) {
-        strncpy(kernel_version, "Unknown", 255);
-        kernel_version[255] = '\0';
-    }
-    return NULL;
-}
-
-void* packages_start_routine(void* arg) {
-    long* packages = arg;
-    if (get_packages(packages) == -1) {
-        *packages = 0;
-    }
-    return NULL;
-}
-
-void* ascii_art_start_routine(void* args) {
-    ThreadArgs* thread_args = args;
-
-    if (load_ascii_art(thread_args->ascii_art, thread_args->longest_line, thread_args->num_lines) == -1) {
-        *(thread_args->ascii_art) = NULL;
-    }
-
-    return NULL;
-}
-
 int main() {
     // Buffers for data
     long packages;
@@ -79,21 +17,28 @@ int main() {
     int longest_line = 0;
     int num_lines = 0;
 
-    // Thread argument for ASCII art
-    ThreadArgs ascii_art_args = {&ascii_art, &longest_line, &num_lines};
-
-    // Create threads
-    pthread_t threads[6];
-    pthread_create(&threads[0], NULL, cpu_start_routine, cpu_name);
-    pthread_create(&threads[1], NULL, hostname_start_routine, hostname);
-    pthread_create(&threads[2], NULL, memory_start_routine, mem_info);
-    pthread_create(&threads[3], NULL, kernel_start_routine, kernel_version);
-    pthread_create(&threads[4], NULL, packages_start_routine, &packages);
-    pthread_create(&threads[5], NULL, ascii_art_start_routine, &ascii_art_args);
-
-    // Wait for threads to complete
-    for (int i = 0; i < 6; i++) {
-        pthread_join(threads[i], NULL);
+    if (get_cpu_model(cpu_name) == -1) {
+        strncpy(cpu_name, "Unknown", 256);
+        cpu_name[255] = '\0';
+    }
+    if (get_hostname(hostname, 256) == 1 ) {
+        strncpy(hostname, "Unknown", 255);
+        hostname[255] = '\0';
+    }
+    if (get_kernel_version(kernel_version, 256) == -1) {
+        strncpy(kernel_version, "Unknown", 255);
+        kernel_version[255] = '\0';
+    }
+    if (get_memory(mem_info) == -1) {
+        strncpy(mem_info, "Unknown", 256);
+        mem_info[255] = '\0';
+    }
+    if (get_packages(&packages) == -1) {
+        packages = 0;
+    }
+    if (load_ascii_art(&ascii_art, &longest_line, &num_lines) == -1) {
+        printf("Error loading ascii art. Check ~/.config/smallfetch/ascii.txt.");
+        return -1;
     }
 
     // Custom colors
